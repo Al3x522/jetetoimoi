@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Une parenthèse à deux</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    :root {
+      --bg: #f7f6f4;
+      --text: #1e1e1e;
+      --soft: #6f6f6f;
+      --card: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: auto;
+      padding: 32px 24px 64px;
+    }
+
+    h1, h2 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    h1 { font-size: 32px; }
+    h2 { font-size: 22px; margin-top: 0; }
+
+    .subtitle {
+      color: var(--soft);
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+    }
+
+    .day {
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--soft);
+      margin-bottom: 8px;
+    }
+
+    .map {
+      height: 220px;
+      border-radius: 16px;
+      margin-top: 16px;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 24px;
+    }
+
+    button {
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: var(--soft);
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- PAGE 0 : INTRO -->
+    <div class="page active">
+      <h1>Une parenthèse à deux</h1>
+      <p class="subtitle">Dinard · Saint-Malo · 26 → 28 décembre</p>
+
+      <p>
+        Trois jours.<br>
+        Pas de logistique.<br>
+        Pas de décisions à prendre.<br>
+        Juste se laisser porter.
+      </p>
+
+      <div class="nav">
+        <span></span>
+        <button onclick="nextPage()">→</button>
+      </div>
+    </div>
+
+    <!-- PAGE 1 : VENDREDI -->
+    <div class="page">
+      <div class="card">
+        <div class="day">Vendredi 26 — Arrivée</div>
+
+        <p>
+          Dinard, fin de matinée.<br>
+          On respire.
+        </p>
+
+        <p>
+          Un déjeuner au hasard<br>
+          Parce que parfois, ne pas choisir, c’est déjà se détendre.
+        </p>
+
+        <p>
+          Une balade dans la ville, un café, un endroit qu’on aimera sûrement (Merci Monsieur…).
+        </p>
+
+        <p>
+          Le soir,<br>
+		  la terre,<br>
+          un restaurant.<br>
+        </p>
+
+        <div id="map-vendredi" class="map"></div>
+      </div>
+
+      <div class="nav">
+        <button onclick="prevPage()">←</button>
+        <button onclick="nextPage()">→</button>
+      </div>
+    </div>
+
+    <!-- PAGE 2 : SAMEDI -->
+    <div class="page">
+      <div class="card">
+        <div class="day">Samedi 27 — Lâcher prise</div>
+
+        <p>
+          Une matinée tranquille.<br>
+          Du repos, du calme… et un moment de soin à 2.<br>
+        </p>
+
+        <p>Déjeuner sans plan figé.</p>
+
+        <p>
+          Puis le bord de mer,<br>
+          marcher, regarder,<br>
+          laisser l'air faire son travail.
+        </p>
+
+        <p>
+          En fin de journée,<br>
+          le feu,<br>
+		  un verre au Darling.
+        </p>
+
+        <div id="map-samedi" class="map"></div>
+      </div>
+
+      <div class="nav">
+        <button onclick="prevPage()">←</button>
+        <button onclick="nextPage()">→</button>
+      </div>
+    </div>
+
+    <!-- PAGE 3 : DIMANCHE -->
+    <div class="page">
+      <div class="card">
+        <div class="day">Dimanche 28 — S’évader</div>
+
+        <p>
+          Un bateau.<br>
+          L'eau.<br>
+          Cap sur Saint-Malo.
+        </p>
+
+        <p>Un brunch chez Cavoua.</p>
+
+        <p>
+          Puis flâner dans les rues,<br>
+          sans montre,<br>
+          sans urgence.
+        </p>
+
+        <p>Retour en douceur.<br>
+		"Qu'est ce que t'as fait des petits?"
+		</p>
+
+        <div id="map-dimanche" class="map"></div>
+      </div>
+
+      <div class="nav">
+        <button onclick="prevPage()">←</button>
+        <button onclick="nextPage()">→</button>
+      </div>
+	 </div>
+	  <!-- PAGE 4 : MESSAGE -->
+	<div class="page">
+		<div class="card">
+			<div class="day">Je, Te, Toi, Moi</div>
+
+			<p>
+			Axelle,
+
+			Je t’écris, sans chercher à raviver quoi que ce soit, sans colère ni justification.<br>
+		Juste pour poser des mots clairs sur ce que je ressens, sur ce que je comprends enfin, et sur ce que je crois possible pour nous.<br>
+		
+		Ces deux dernières années ont été marquées par mes failles, mes errances.<br>
+		Je me suis débattu contre des choses que je n’avais jamais affrontées : la perte de mon père, des blessures enfouies, un sentiment d’épuisement profond, et cette addiction qui m’a piégé dans un cycle d’évasion.<br>
+		Je me suis éloigné de moi-même, et forcément, de toi.<br>
+		Tu as été la plus exposée à mes dérives, la plus touchée par ma perte de repères.<br>
+		Et je veux que tu saches que rien n’a jamais été dirigé contre toi.<br>
+		Je n’ai jamais voulu te blesser.
+		Mais dans ma fuite, dans mes maladresses, dans ma perte de stabilité, j’ai créé de la douleur là où je voulais protéger.<br>
+		<br>
+		Pendant que je sombrais dans mes déséquilibres, toi tu entamais ta reconstruction.<br>
+		Tu cherchais un cadre, de la sécurité, un espace où tu pouvais enfin exister pour toi.<br>
+		Et nos deux trajectoires se sont croisées, mais à contretemps.<br>
+		Moi, j’ai commencé à me perdre quand toi tu commençais à te retrouver.<br>
+		Et dans cet écart, nous avons commencé à ne plus parler la même langue.<br>
+		<br>
+		Je sais que tu as été blessée.<br>
+		Je sais que tu t’es sentie trahie, fatiguée, que ton seuil de tolérance a explosé.<br>
+		Je veux aussi que tu saches que je comprends aujourd’hui ce que tu vivais, même dans tes propres excès, même dans tes réactions parfois dures, ou fermées.<br>
+		Parce que je vois maintenant d’où ça venait : de tes blessures, de ton histoire, de ce besoin vital de ne plus revivre la peur, l’abandon, la colère des autres.<br>
+		Je n’ai pas su le mesurer à temps, ni poser mes propres limites quand il le fallait.<br>
+		J’ai voulu être fort, soutenir, encaisser, sans comprendre qu’à force de me taire, je t’asphyxiais aussi.<br>
+		<br>
+		Aujourd’hui, je ne cherche pas à recoller ce qui s’est brisé.<br>
+		Je ne crois pas qu’on puisse ou qu’on doive revenir à “avant”.<br>
+		Mais je crois profondément que ce que nous avons vécu peut devenir une base neuve, parce qu’il a mis à nu tout ce qui n’allait pas.<br>
+		Nous savons désormais où sont nos failles, nos zones de danger, nos manques de communication, nos excès d’émotion, nos silences trop longs.<br>
+		Et je crois sincèrement que si un couple doit se reconstruire un jour, c’est à partir de là — dans la vérité nue, pas dans l’illusion du passé.<br>
+		<br>
+		Je crois en nous, pas comme on était, mais comme on peut devenir.<br>
+		Pas uniquement dans le feu et la passion qui blesse, mais dans la lucidité, la douceur et la stabilité que nous cherchons tous les deux.<br>
+		<br>
+		Tu es pour moi une évidence émotionnelle, une personne à part, celle à travers qui j’ai le plus appris — sur l’amour, sur la responsabilité, sur mes propres limites.<br>
+		Et même dans la douleur, il reste en moi cette conviction calme que tout ce que nous traversons n’est pas la fin, mais un passage.<br>
+		<br>
+		Je t’écris pour être vrai.<br>
+		Et pour te dire que l’homme que tu as connu se reconstruit, pas pour revenir en arrière, mais pour avancer avec respect, et toujours avec toi au cœur de son histoire.<br>
+		<br>
+		JE T'AIME<br>
+		<br>
+			Alexandre
+			</p>
+	</div>
+
+		<div class="nav">
+			<button onclick="prevPage()">←</button>
+			<span></span>
+		</div>
+
+    </div>
+
+
+ <script>
+  let currentPage = 0;
+  const pages = document.querySelectorAll('.page');
+  const maps = {};
+
+  function showPage(index) {
+    pages.forEach(p => p.classList.remove('active'));
+    pages[index].classList.add('active');
+    currentPage = index;
+
+    // Init map uniquement quand la page est visible
+    if (index === 1 && !maps.vendredi) initVendredi();
+    if (index === 2 && !maps.samedi) initSamedi();
+    if (index === 3 && !maps.dimanche) initDimanche();
+  }
+
+  function nextPage() {
+    if (currentPage < pages.length - 1) showPage(currentPage + 1);
+  }
+
+  function prevPage() {
+    if (currentPage > 0) showPage(currentPage - 1);
+  }
+
+  function createMap(id, center, markers) {
+    const map = L.map(id).setView(center, 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    markers.forEach(m =>
+      L.marker(m.coords).addTo(map).bindPopup(m.label)
+    );
+
+    // 🔑 FORÇAGE DU RAFRAÎCHISSEMENT
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 200);
+
+    return map;
+  }
+
+  function initVendredi() {
+    maps.vendredi = createMap("map-vendredi",
+      [48.6329, -2.0626],
+      [
+        { coords: [48.6305823, -2.0658285], label: "Votre point de chute" },
+        { coords: [48.6329827, -2.0538291], label: "Balade & café" },
+        { coords: [48.635074, -2.055029], label: "Restaurant du soir" }
+      ]
+    );
+  }
+
+  function initSamedi() {
+    maps.samedi = createMap("map-samedi",
+      [48.633, -2.061],
+      [
+        { coords: [48.6276376, -2.0737552], label: "Lieu de soin" },
+        { coords: [48.638431, -2.069337], label: "Bord de mer" },
+        { coords: [48.6350146, -2.0643641], label: "Le Darling" }
+      ]
+    );
+  }
+
+  function initDimanche() {
+    maps.dimanche = createMap("map-dimanche",
+      [48.649, -2.025],
+      [
+        { coords: [48.636122, -2.0507523], label: "Départ bateau" },
+        { coords: [48.649533, -2.0265944], label: "Brunch Cavoua" },
+        { coords: [48.6493819, -2.0252011], label: "Intra-muros" }
+      ]
+    );
+  }
+</script>
+</body>
+</html>
