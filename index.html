@@ -216,9 +216,9 @@
 		<span></span>
 	 </div>
 	  <!-- PAGE 4 : MESSAGE -->
-	<div class="page">
-		<div class="card">
-			<div class="day">Je, Te, Toi, Moi</div>
+		<div class="page" id="page-secret">
+			<div class="card">
+				<div class="day">Je, Te, Toi, Moi</div>
 
 			<p>
 			Axelle,
@@ -282,11 +282,17 @@
   const maps = {};
 
   let holdTimer = null;
-  
-  function holdToReveal() {
+function revealSecretPage() {
+  const secret = document.getElementById("page-secret");
+  if (!secret) return;
+
+  pages.forEach(p => p.classList.remove('active'));
+  secret.classList.add('active');
+}  
+function holdToReveal() {
   holdTimer = setTimeout(() => {
-    showPage(pages.length - 1); // dernière page
-  }, 2000); // 2 secondes
+    revealSecretPage();
+  }, 2000);
 }
 
 function cancelHold() {
@@ -295,16 +301,17 @@ function cancelHold() {
     holdTimer = null;
   }
 }
-  function showPage(index) {
-    pages.forEach(p => p.classList.remove('active'));
-    pages[index].classList.add('active');
-    currentPage = index;
+function showPage(index) {
+  if (index < 0 || index >= pages.length) return; // ✅ sécurité
 
-    // Init map uniquement quand la page est visible
-    if (index === 1 && !maps.vendredi) initVendredi();
-    if (index === 2 && !maps.samedi) initSamedi();
-    if (index === 3 && !maps.dimanche) initDimanche();
-  }
+  pages.forEach(p => p.classList.remove('active'));
+  pages[index].classList.add('active');
+  currentPage = index;
+
+  if (index === 1 && !maps.vendredi) initVendredi();
+  if (index === 2 && !maps.samedi) initSamedi();
+  if (index === 3 && !maps.dimanche) initDimanche();
+}
 
   function nextPage() {
     if (currentPage < pages.length - 1) showPage(currentPage + 1);
