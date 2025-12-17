@@ -196,12 +196,7 @@
           sans urgence.
         </p>
 
-        <p
-			onmousedown="holdToReveal()"
-			onmouseup="cancelHold()"
-			ontouchstart="holdToReveal()"
-			ontouchend="cancelHold()"
-		>
+		<p>
 			Retour en douceur.
 		</p>
 
@@ -213,7 +208,7 @@
 
       <div class="nav">
         <button onclick="prevPage()">←</button>
-		<span></span>
+		<button onclick="nextPage()">→</button>
 	 </div>
 	  <!-- PAGE 4 : MESSAGE -->
 		<div class="page" id="page-secret">
@@ -281,26 +276,9 @@
   const pages = document.querySelectorAll('.page');
   const maps = {};
 
-  let holdTimer = null;
-function revealSecretPage() {
-  const secret = document.getElementById("page-secret");
-  if (!secret) return;
-
   pages.forEach(p => p.classList.remove('active'));
   secret.classList.add('active');
-}  
-function holdToReveal() {
-  holdTimer = setTimeout(() => {
-    revealSecretPage();
-  }, 2000);
-}
 
-function cancelHold() {
-  if (holdTimer) {
-    clearTimeout(holdTimer);
-    holdTimer = null;
-  }
-}
 function showPage(index) {
   if (index < 0 || index >= pages.length) return; // ✅ sécurité
 
